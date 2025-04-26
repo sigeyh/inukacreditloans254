@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Confirm Details</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #1f1f1f, #2c3e50);
+      font-family: 'Segoe UI', sans-serif;
+      color: #f1f1f1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: #1e1e1e;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      color: #ffffff;
+    }
+
+    .detail {
+      margin: 10px 0;
+      font-size: 0.95rem;
+    }
+
+    .detail strong {
+      display: inline-block;
+      width: 120px;
+      color: #bbb;
+    }
+
+    .detail span {
+      color: #fefefe;
+    }
+
+    .button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 25px;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 114, 255, 0.4);
+    }
+
+    /* Hide scrollbars */
+    ::-webkit-scrollbar {
+      width: 0;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Confirm Your Details</h1>
+    <div class="detail"><strong>Last Name:</strong> <span id="lastname">Loading...</span></div>
+    <div class="detail"><strong>First Name:</strong> <span id="firstname">Loading...</span></div>
+    <div class="detail"><strong>Phone Number:</strong> <span id="phone">Loading...</span></div>
+    <div class="detail"><strong>ID Number:</strong> <span id="idnumber">Loading...</span></div>
+    <div class="detail"><strong>Email Address:</strong> <span id="email">Loading...</span></div>
+    <div class="detail"><strong>Location:</strong> <span id="location">Loading...</span></div>
+    <div class="detail"><strong>Date of Birth:</strong> <span id="dob">Loading...</span></div>
+    <button class="button" onclick="confirmDetails()">Confirm</button>
+  </div>
+
+  <script>
+    document.getElementById('lastname').textContent = localStorage.getItem('lastname') || 'Not provided';
+    document.getElementById('firstname').textContent = localStorage.getItem('firstname') || 'Not provided';
+    document.getElementById('phone').textContent = localStorage.getItem('phone') || 'Not provided';
+    document.getElementById('idnumber').textContent = localStorage.getItem('idnumber') || 'Not provided';
+    document.getElementById('email').textContent = localStorage.getItem('email') || 'Not provided';
+    document.getElementById('location').textContent = localStorage.getItem('location') || 'Not provided';
+    document.getElementById('dob').textContent = localStorage.getItem('dob') || 'Not provided';
+
+    function confirmDetails() {
+      window.location.href = 'otherdetails.html';
+    }
+  </script>
+</body>
+</html>
