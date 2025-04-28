@@ -79,18 +79,27 @@
     const installBtn = document.getElementById('getStartedBtn');
     let isAppInstalled = localStorage.getItem('isAppInstalled');
 
-    // Check if app is installed
-    if (isAppInstalled === 'true') {
-      installBtn.disabled = false; // Enable button if app is installed
-      document.getElementById('installModal').style.display = 'none'; // Hide modal
+    // Check if the app is installed or is being used as a PWA
+    function checkIfAppInstalled() {
+      // For mobile and desktop PWAs, we check the display mode and navigator.standalone
+      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+        // App is already installed or being used as a PWA
+        installBtn.disabled = false; // Enable button
+        document.getElementById('installModal').style.display = 'none'; // Hide modal
+      } else {
+        // Not a PWA, show install prompt
+        installBtn.disabled = true;
+        document.getElementById('installModal').classList.remove('hidden');
+      }
     }
 
     // Handle the beforeinstallprompt event
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
+      checkIfAppInstalled(); // Check if it's PWA or not
 
-      // Show install prompt if app is not yet installed
+      // If the app is not installed yet, show the modal to install
       if (isAppInstalled !== 'true') {
         document.getElementById('installModal').classList.remove('hidden');
       }
@@ -120,6 +129,9 @@
     function showInstallModal() {
       document.getElementById('installModal').classList.remove('hidden');
     }
+
+    // Check if the app is installed or being used as a PWA
+    checkIfAppInstalled();
   </script>
 
   <script async data-explicit-opt-in="true" data-cookie-opt-in="true" data-deployment-id="dpl_5b1LwqfK8TAhDdAiQHJciFseYbKg" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
