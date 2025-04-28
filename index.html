@@ -55,7 +55,7 @@
   <div id="installModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
     <div class="bg-white text-black p-6 rounded-2xl max-w-sm w-full text-center space-y-4">
       <h2 class="text-2xl font-bold">App Installation Required</h2>
-      <p>You have to install Inuka Credit to proceed.</p>
+      <p>You must install Inuka Credit to proceed.</p>
       <button onclick="promptInstall()" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-6 rounded-xl font-semibold transition">
         Install Now
       </button>
@@ -76,10 +76,22 @@
   <!-- Install Prompt Handling -->
   <script>
     let deferredPrompt;
+    let isAppInstalled = localStorage.getItem('isAppInstalled');
+
+    // If app is already installed, skip the prompt
+    if (isAppInstalled === 'true') {
+      document.querySelector('button').disabled = true; // Disable button
+      document.getElementById('installModal').style.display = 'none'; // Hide modal
+    }
 
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
+
+      // Only show the modal if app isn't already installed
+      if (!isAppInstalled) {
+        document.getElementById('installModal').classList.remove('hidden');
+      }
     });
 
     function promptInstall() {
@@ -88,6 +100,7 @@
         deferredPrompt.userChoice.then((choiceResult) => {
           if (choiceResult.outcome === 'accepted') {
             console.log('User accepted the install prompt');
+            localStorage.setItem('isAppInstalled', 'true'); // Set installed flag
             window.location.href = "register.html"; // Go to register page after install
           } else {
             console.log('User dismissed the install prompt');
