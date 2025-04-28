@@ -45,39 +45,42 @@
       </ol>
     </div>
 
-    <!-- Install button appears if available -->
-    <button id="installBtn" class="block bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-xl text-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl w-full mb-4 hidden">
-      Install App
-    </button>
-
-    <!-- Original "Get Started" button -->
-    <a href="register.html" id="getStartedBtn" class="block bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl text-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl w-full">
+    <!-- Get Started button -->
+    <button id="getStartedBtn" class="block bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl text-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl w-full">
       Get Started
-    </a>
+    </button>
   </div>
 
-  <!-- PWA Service Worker -->
+  <!-- PWA Service Worker and Install logic -->
   <script>
     let deferredPrompt;
-    const installBtn = document.getElementById('installBtn');
 
+    // Catch the install event
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      installBtn.classList.remove('hidden');
+    });
 
-      installBtn.addEventListener('click', async () => {
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          const { outcome } = await deferredPrompt.userChoice;
-          if (outcome === 'accepted') {
-            console.log('User accepted install.');
-          } else {
-            console.log('User dismissed install.');
-          }
-          deferredPrompt = null;
+    document.getElementById('getStartedBtn').addEventListener('click', async () => {
+      if (deferredPrompt) {
+        // Show install prompt first
+        deferredPrompt.prompt();
+
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          console.log('User accepted to install the app');
+        } else {
+          console.log('User dismissed the install prompt');
         }
-      });
+
+        deferredPrompt = null;
+
+        // After install prompt (no matter accepted or skipped), redirect to register page
+        window.location.href = "register.html";
+      } else {
+        // If no install prompt available, just proceed
+        window.location.href = "register.html";
+      }
     });
 
     if ('serviceWorker' in navigator) {
@@ -93,5 +96,4 @@
 
 </body>
 </html>
-
 
