@@ -45,12 +45,14 @@
       </ol>
     </div>
 
-    <button id="installBtn" class="block bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl text-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl w-full mb-4 hidden">
-      Install Inuka Credit App
+    <!-- Install button appears if available -->
+    <button id="installBtn" class="block bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-xl text-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl w-full mb-4 hidden">
+      Install App
     </button>
 
-    <a href="register.html" id="startBtn" class="block bg-green-600 hover:bg-green-700 text-white py-2 rounded-xl text-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl w-full hidden">
-      Continue Without Installing
+    <!-- Original "Get Started" button -->
+    <a href="register.html" id="getStartedBtn" class="block bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl text-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl w-full">
+      Get Started
     </a>
   </div>
 
@@ -58,22 +60,20 @@
   <script>
     let deferredPrompt;
     const installBtn = document.getElementById('installBtn');
-    const startBtn = document.getElementById('startBtn');
 
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
       installBtn.classList.remove('hidden');
-      startBtn.classList.remove('hidden');
 
       installBtn.addEventListener('click', async () => {
         if (deferredPrompt) {
           deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
           if (outcome === 'accepted') {
-            console.log('User accepted the install prompt.');
+            console.log('User accepted install.');
           } else {
-            console.log('User dismissed the install prompt.');
+            console.log('User dismissed install.');
           }
           deferredPrompt = null;
         }
@@ -93,4 +93,5 @@
 
 </body>
 </html>
+
 
