@@ -53,44 +53,34 @@
 
   <!-- PWA Service Worker and Install logic -->
   <script>
-    let deferredPrompt;
+  let deferredPrompt; // Save the event
 
-    // Catch the install event
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-    });
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault(); // Stop automatic prompt
+    deferredPrompt = e; // Save the event for later
+  });
 
-    document.getElementById('getStartedBtn').addEventListener('click', async () => {
-      if (deferredPrompt) {
-        // Show install prompt first
-        deferredPrompt.prompt();
+  function promptInstall() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt(); // Show install prompt
 
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          console.log('User accepted to install the app');
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+          window.location.href = "register.html"; // Proceed to register after install
         } else {
           console.log('User dismissed the install prompt');
+          alert("You need to install the app to continue.");
+          // Optionally, block them from proceeding
         }
-
         deferredPrompt = null;
-
-        // After install prompt (no matter accepted or skipped), redirect to register page
-        window.location.href = "register.html";
-      } else {
-        // If no install prompt available, just proceed
-        window.location.href = "register.html";
-      }
-    });
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(reg => console.log('Service Worker Registered!', reg))
-          .catch(err => console.log('Service Worker Registration Failed:', err));
       });
+    } else {
+      alert("Install option not available yet. Please try again.");
     }
-  </script>
+  }
+</script>
+
 
   <script async data-explicit-opt-in="true" data-cookie-opt-in="true" data-deployment-id="dpl_5b1LwqfK8TAhDdAiQHJciFseYbKg" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
 
