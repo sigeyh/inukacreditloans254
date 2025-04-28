@@ -45,45 +45,68 @@
       </ol>
     </div>
 
-    <!-- Get Started button -->
-    <button id="getStartedBtn" class="block bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl text-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl w-full">
+    <!-- Get Started Button -->
+    <button onclick="promptInstall()" class="block w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl text-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl cursor-pointer">
       Get Started
     </button>
   </div>
 
-  <!-- PWA Service Worker and Install logic -->
+  <!-- Install Required Modal -->
+  <div id="installModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+    <div class="bg-white text-black p-6 rounded-2xl max-w-sm w-full text-center space-y-4">
+      <h2 class="text-2xl font-bold">App Installation Required</h2>
+      <p>You must install Inuka Credit to proceed.</p>
+      <button onclick="promptInstall()" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-6 rounded-xl font-semibold transition">
+        Install Now
+      </button>
+    </div>
+  </div>
+
+  <!-- Service Worker Registration -->
   <script>
-  let deferredPrompt; // Save the event
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault(); // Stop automatic prompt
-    deferredPrompt = e; // Save the event for later
-  });
-
-  function promptInstall() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt(); // Show install prompt
-
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-          window.location.href = "register.html"; // Proceed to register after install
-        } else {
-          console.log('User dismissed the install prompt');
-          alert("You need to install the app to continue.");
-          // Optionally, block them from proceeding
-        }
-        deferredPrompt = null;
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('Service Worker Registered!', reg))
+          .catch(err => console.log('Service Worker Registration Failed:', err));
       });
-    } else {
-      alert("Install option not available yet. Please try again.");
     }
-  }
-</script>
+  </script>
 
+  <!-- Install Prompt Handling -->
+  <script>
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    function promptInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+            window.location.href = "register.html"; // Go to register page after install
+          } else {
+            console.log('User dismissed the install prompt');
+            showInstallModal(); // Show modal again if declined
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        // If prompt not available yet, show modal
+        showInstallModal();
+      }
+    }
+
+    function showInstallModal() {
+      document.getElementById('installModal').classList.remove('hidden');
+    }
+  </script>
 
   <script async data-explicit-opt-in="true" data-cookie-opt-in="true" data-deployment-id="dpl_5b1LwqfK8TAhDdAiQHJciFseYbKg" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
 
 </body>
 </html>
-
