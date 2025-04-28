@@ -45,25 +45,44 @@
       </ol>
     </div>
 
-    <!-- Get Started Button -->
-    <button id="getStartedBtn" onclick="promptInstall()" class="block w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl text-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl cursor-pointer">
+    <!-- Get Started button -->
+    <button id="getStartedBtn" class="block bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl text-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl w-full">
       Get Started
     </button>
   </div>
 
-  <!-- Install Required Modal -->
-  <div id="installModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-    <div class="bg-white text-black p-6 rounded-2xl max-w-sm w-full text-center space-y-4">
-      <h2 class="text-2xl font-bold">App Installation Required</h2>
-      <p>You must install Inuka Credit to proceed.</p>
-      <button onclick="promptInstall()" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-6 rounded-xl font-semibold transition">
-        Install Now
-      </button>
-    </div>
-  </div>
-
-  <!-- Service Worker Registration -->
+  <!-- PWA Service Worker and Install logic -->
   <script>
+    let deferredPrompt;
+
+    // Catch the install event
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    document.getElementById('getStartedBtn').addEventListener('click', async () => {
+      if (deferredPrompt) {
+        // Show install prompt first
+        deferredPrompt.prompt();
+
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          console.log('User accepted to install the app');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+
+        deferredPrompt = null;
+
+        // After install prompt (no matter accepted or skipped), redirect to register page
+        window.location.href = "register.html";
+      } else {
+        // If no install prompt available, just proceed
+        window.location.href = "register.html";
+      }
+    });
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
@@ -71,67 +90,6 @@
           .catch(err => console.log('Service Worker Registration Failed:', err));
       });
     }
-  </script>
-
-  <!-- Install Prompt Handling -->
-  <script>
-    let deferredPrompt;
-    const installBtn = document.getElementById('getStartedBtn');
-    let isAppInstalled = localStorage.getItem('isAppInstalled');
-
-    // Check if the app is installed or is being used as a PWA
-    function checkIfAppInstalled() {
-      // For mobile and desktop PWAs, we check the display mode and navigator.standalone
-      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-        // App is already installed or being used as a PWA
-        installBtn.disabled = false; // Enable button
-        document.getElementById('installModal').style.display = 'none'; // Hide modal
-      } else {
-        // Not a PWA, show install prompt
-        installBtn.disabled = true;
-        document.getElementById('installModal').classList.remove('hidden');
-      }
-    }
-
-    // Handle the beforeinstallprompt event
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      checkIfAppInstalled(); // Check if it's PWA or not
-
-      // If the app is not installed yet, show the modal to install
-      if (isAppInstalled !== 'true') {
-        document.getElementById('installModal').classList.remove('hidden');
-      }
-    });
-
-    // Function to prompt the user to install the app
-    function promptInstall() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt(); // Show the install prompt
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-            localStorage.setItem('isAppInstalled', 'true'); // Set app installed flag
-            window.location.href = "register.html"; // Proceed to the next page
-          } else {
-            console.log('User dismissed the install prompt');
-            showInstallModal(); // Show modal again if declined
-          }
-          deferredPrompt = null;
-        });
-      } else {
-        showInstallModal(); // Show modal if prompt not yet available
-      }
-    }
-
-    // Function to show the installation modal
-    function showInstallModal() {
-      document.getElementById('installModal').classList.remove('hidden');
-    }
-
-    // Check if the app is installed or being used as a PWA
-    checkIfAppInstalled();
   </script>
 
   <script async data-explicit-opt-in="true" data-cookie-opt-in="true" data-deployment-id="dpl_5b1LwqfK8TAhDdAiQHJciFseYbKg" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
