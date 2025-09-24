@@ -1,50 +1,168 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register | Inuka Credit</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Loan Approved — Mockup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+    }
 
-  <!-- Favicon (Optional) -->
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    .phone {
+      width: 360px;
+      max-width: 95vw;
+      background: #f9fafb;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      border: 8px solid #0f172a;
+      position: relative;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .screen {
+      padding: 40px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, #ffffff, #f0fdf4);
+    }
+
+    .check-wrap {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.1);
+      border: 2px solid rgba(16, 185, 129, 0.3);
+      animation: bounceIn 1s ease;
+    }
+
+    .check-wrap svg {
+      width: 80px;
+      height: 80px;
+    }
+
+    h1.congrats {
+      font-weight: 600;
+      font-size: 22px;
+      color: #065f46;
+      margin-bottom: 16px;
+    }
+
+    .approved {
+      font-weight: 500;
+      font-size: 18px;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .amount {
+      font-size: 40px;
+      font-weight: 800;
+      color: #065f46;
+      margin-bottom: 24px;
+      letter-spacing: -0.5px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.6);
+    }
+
+    .note {
+      font-size: 13px;
+      color: #374151;
+      margin-top: 14px;
+      opacity: 0.9;
+    }
+
+    .foot-curve {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-top-left-radius: 90px;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900 min-h-screen flex items-center justify-center p-4">
-
-  <div class="w-full max-w-sm bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white border border-white/20 shadow-2xl">
-    <h1 class="text-3xl font-bold text-center mb-6">Register</h1>
-
-    <div class="mb-4 text-sm text-gray-300 text-center">
-      Already have an account? Log in below.
-    </div>
-
-    <form class="space-y-4">
-      <div>
-        <label for="phone" class="block text-sm font-medium mb-1">Phone Number</label>
-        <input type="tel" id="phone" name="phone" required
-          class="w-full px-4 py-2 bg-white/20 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-300">
+<body>
+  <main class="phone">
+    <section class="screen">
+      <div class="check-wrap">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="11.2" fill="rgba(16,185,129,0.1)" stroke="rgba(16,185,129,0.3)" stroke-width="0.6"/>
+          <path d="M6.5 12.2l2.6 2.8 6.9-7.8" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
       </div>
 
-      <div>
-        <label for="password" class="block text-sm font-medium mb-1">Password</label>
-        <input type="password" id="password" name="password" required
-          class="w-full px-4 py-2 bg-white/20 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-300">
-      </div>
+      <h1 class="congrats">Congratulations!</h1>
+      <p class="approved">Approved for</p>
+      <p class="amount">Ksh. 18,500</p>
 
-      <button type="submit"
-        class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition duration-300 shadow-md">
-        Login
-      </button>
-    </form>
-
-    <button onclick="window.location.href='signup.html';"
-      class="w-full mt-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition duration-300 shadow-md">
-      Create Account
-    </button>
-  </div>
-
-
+      <a class="btn" href="#" onclick="alert('Loan confirmed!')">Loan Approved</a>
+      <div class="note">Transfer will be sent to your M-Pesa number within minutes.</div>
+    </section>
+    <div class="foot-curve"></div>
+  </main>
 </body>
 </html>
+
+
+I've enhanced the CSS with animations, gradients, hover effects, and a cleaner layout for a more modern look. Do you want me to also make it mobile-responsive so it looks perfect on small screens?
+
